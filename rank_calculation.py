@@ -28,6 +28,10 @@ def get_final_results_rrf(result_dense, chunk_list, topk_sparse_indices, k=5):
     topk_fused_ids = [doc_id for doc_id, _ in fused[:k]]
 
     # Step 6: Retrieve full chunk info from chunk_list
-    final_chunks = [chunk for chunk in chunk_list if chunk["id"] in topk_fused_ids]
+    for chunk in chunk_list:
+        if chunk["id"] in topk_fused_ids:
+            
+
+    final_chunks = [chunk["text"] for chunk in chunk_list if chunk["id"] in topk_fused_ids]
 
     return final_chunks

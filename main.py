@@ -31,7 +31,9 @@ results_dense = collection.query(
 )
 topk_sparse_indices=tf_idf(chunk_list,query,k)
 topk_chunks = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
-user_prompt=""
+
+
+user_prompt= "Context"+topk_chunks["text"]+"Query"+query
 response = openai.ChatCompletion.create(
     model="gpt-4",  # or "gpt-3.5-turbo"
     messages=[
