@@ -6,5 +6,5 @@ def get_embeddings(chunk):
         input=chunk,
         model="text-embedding-3-small"
     )
-
+    
     return response.data[0].embedding

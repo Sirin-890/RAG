@@ -1,7 +1,7 @@
 import fitz  # PyMuPDF
 import requests
 from bs4 import BeautifulSoup
-
+from loguru import logger
 
 def pdf_parse(pdf_path):
     doc = fitz.open(pdf_path)
@@ -45,5 +45,6 @@ def parse_all(pdf_path,url):
     chunk=chunk_pdf+chunk_html
     for idx, ch in enumerate(chunk):
         ch["id"] = f"chunk{idx}"
-
+    logger.debug("chunking complete")
+    logger.debug(f"{len(chunk)}no. of chunk formed ")
     return chunk
