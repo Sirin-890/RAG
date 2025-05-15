@@ -11,27 +11,19 @@ def reciprocal_rank_fusion(rank_dicts, k=60):
     return sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
 
 def get_final_results_rrf(result_dense, chunk_list, topk_sparse_indices, k=5):
-    # Step 1: Extract dense IDs
-    dense_ids = result_dense["ids"][0]  # List of doc IDs from dense retrieval
-
-    # Step 2: Extract sparse IDs using indices
+    
+    dense_ids = result_dense["ids"][0]  
     sparse_ids = [chunk_list[i]["id"] for i in topk_sparse_indices]
 
-    # Step 3: Build rank dicts
     dense_rank = get_rank_dict(dense_ids)
     sparse_rank = get_rank_dict(sparse_ids)
 
-    # Step 4: Apply RRF
     fused = reciprocal_rank_fusion([dense_rank, sparse_rank], k=60)
 
-    # Step 5: Pick top-k fused results
     topk_fused_ids = [doc_id for doc_id, _ in fused[:k]]
-
-    # Step 6: Retrieve full chunk info from chunk_list
     for chunk in chunk_list:
         if chunk["id"] in topk_fused_ids:
-            
+           final_chunks=final_chunks+ chunk["text"]
 
-    final_chunks = [chunk["text"] for chunk in chunk_list if chunk["id"] in topk_fused_ids]
 
     return final_chunks

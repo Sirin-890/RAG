@@ -43,4 +43,7 @@ def parse_all(pdf_path,url):
     chunk_pdf=pdf_parse(pdf_path=pdf_path)
     chunk_html=html_parse(url=url)
     chunk=chunk_pdf+chunk_html
+    for idx, ch in enumerate(chunk):
+        ch["id"] = f"chunk{idx}"
+
     return chunk
