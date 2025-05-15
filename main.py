@@ -38,7 +38,7 @@ results_dense = collection.query(
     n_results=k
 )
 topk_sparse_indices=tf_idf(chunk_list,query,k)
-topk_chunks = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
+topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
 
 
 user_prompt= "Context"+topk_chunks+"Query"+query
@@ -51,5 +51,7 @@ response = client.chat.completions.create(
     temperature=0  # optional, lower = more accurate
 )
 
-print(response.choices[0].message.content)
+logger.info(response.choices[0].message.content)
+print(l)
+
 

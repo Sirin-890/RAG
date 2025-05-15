@@ -17,7 +17,7 @@ def pdf_parse(pdf_path):
                 "text": para.strip(),
                 "metadata": {
                     "source": "CMU LSTM Notes",
-                    "page": pg_num + 1
+                    "loc": pg_num + 1
                 }
             })
     return chunks
@@ -35,7 +35,7 @@ def html_parse(url):
                 "text": text,
                 "metadata": {
                     "source": "Chris Olah Blog",
-                    "tag": tag.name
+                    "loc": tag.name
                 }
             })
     return chunks
