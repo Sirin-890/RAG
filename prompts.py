@@ -8,3 +8,4 @@ system_prompt = (
     "Answer the user's question using the provided context. "
     "If the answer is not in the context, say 'I don't know' instead of making something up."
 )
+prompt2="a"
