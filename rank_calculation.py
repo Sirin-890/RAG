@@ -21,6 +21,7 @@ def get_final_results_rrf(result_dense, chunk_list, topk_sparse_indices, k=5):
     fused = reciprocal_rank_fusion([dense_rank, sparse_rank], k=60)
 
     topk_fused_ids = [doc_id for doc_id, _ in fused[:k]]
+    final_chunks=""
     for chunk in chunk_list:
         if chunk["id"] in topk_fused_ids:
            final_chunks=final_chunks+ chunk["text"]
