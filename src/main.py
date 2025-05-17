@@ -71,12 +71,12 @@ def run_rag(query: str, top_k: int = 5) -> str:
     ANSWER:
     """
     response = client.chat.completions.create(
-        model="gpt-4",  # or "gpt-3.5-turbo"
+        model="gpt-4",  
         messages=[
-            #{"role": "system", "content": system_prompt},
+           
             {"role": "user", "content": user_prompt}
         ],
-        temperature=0.3 # optional, lower = more accurate
+        temperature=0.5 
     )
     logger.debug(response.choices[0].message.content)
     print(l)

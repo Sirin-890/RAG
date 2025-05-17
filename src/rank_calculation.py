@@ -1,9 +1,9 @@
 def get_rank_dict(id_list):
-    """Given a ranked list of IDs, return a dict mapping ID to rank."""
+    #Given a ranked list of IDs, return a dict mapping ID to rank.
     return {doc_id: rank for rank, doc_id in enumerate(id_list)}
 
 def reciprocal_rank_fusion(rank_dicts, k=60):
-    """Apply Reciprocal Rank Fusion to combine rank dictionaries."""
+    #Apply Reciprocal Rank Fusion to combine rank dictionaries.
     rrf_scores = {}
     for rank_dict in rank_dicts:
         for doc_id, rank in rank_dict.items():
@@ -35,10 +35,6 @@ def get_final_results_rrf(result_dense, chunk_list, topk_sparse_indices, k=5):
             })
             l.append([chunk["id"], chunk["metadata"]["loc"]])
 
-    # for chunk in chunk_list:
-    #     if chunk["id"] in topk_fused_ids:
-    #        final_chunks=final_chunks+ chunk["text"]
-    #        l.append([chunk["id"],chunk["metadata"]["loc"]])
-
+    
 
     return final_chunks,l
