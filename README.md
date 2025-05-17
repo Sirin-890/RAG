@@ -20,5 +20,7 @@ source rag_venv/bin/activate #rag_venv\Scripts\activate.bat for windows
 pip install -r requirements.txt
 python fast_api.py
 
-
+##After  Contexual Retrival and embedding  formation will  finish server will start rand run ui.py
+```bash
+python ui.py
 
