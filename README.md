@@ -1,14 +1,4 @@
-# RAG Demo
-
-This repository demonstrates a simple Retrieval-Augmented Generation (RAG) pipeline using FastAPI for backend services and Gradio for the user interface.
-
-## Features
-
-- Document embedding and contextual retrieval  
-- FastAPI backend for processing queries  
-- Gradio interface for interacting with the RAG system
-
-## Getting Started
+# Getting Started
 
 Clone the repository and switch into its directory:
 
@@ -16,11 +6,17 @@ Clone the repository and switch into its directory:
 git clone https://github.com/Sirin-890/RAG
 cd RAG
 python3.10 -m venv rag_venv
-source rag_venv/bin/activate #rag_venv\Scripts\activate.bat for windows
+source rag_venv/bin/activate  # For Linux/macOS
+# OR for Windows
+# rag_venv\Scripts\activate
 pip install -r requirements.txt
 python fast_api.py
+```
 
-##After  Contexual Retrival and embedding  formation will  finish server will start rand run ui.py
+After Contextual Retrieval and embedding formation finishes, the server will start. Then run the UI:
+
 ```bash
 python ui.py
+```
 
+Then access the interface at: http://127.0.0.1:7860
