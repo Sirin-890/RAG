@@ -12,88 +12,33 @@ from src.prompts import*
 chroma_client = chromadb.Client()
 import os, asyncio
 
-# openai.api_key = os.getenv("OPENAI_API_KEY")
-# client = OpenAI()
-
-
-# collection = chroma_client.create_collection(name="LSTMNotes")
-# k=5
-# pdf_path="LSTM.pdf"
-# url="https://colah.github.io/posts/2015-08-Understanding-LSTMs/"
-# chunk_list=parse_all(pdf_path,url)
-# all_chunks_context(chunk_list)
-# i=0
-
-
-# for chunk in chunk_list:
-#     i=i+1
-#     embedding=get_embeddings(chunk["text"])
-#     vector_store(collection,embedding,chunk,i)
-#     logger.debug(f"embedding formation of {i}chunk done")
-
-# query=input("enter your quey here")
-# embedding_query=get_embeddings(query)
-# results_dense = collection.query(
-#     query_embeddings=[embedding_query],
-#     n_results=k
-# )
-# topk_sparse_indices=tf_idf(chunk_list,query,k)
-# topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
-
-
-# user_prompt= "Context"+topk_chunks+"Query"+query
-# response = client.chat.completions.create(
-#     model="gpt-4",  # or "gpt-3.5-turbo"
-#     messages=[
-#         {"role": "system", "content": system_prompt},
-#         {"role": "user", "content": user_prompt}
-#     ],
-#     temperature=0  # optional, lower = more accurate
-# )
-
-# logger.info(response.choices[0].message.content)
-# print(l)
-
-
-# from parsing import parse_all
-# from contextaul_retrival import all_chunks_context
-# from embeddings import get_embeddings
-# from vector_store import vector_store
-# import chromadb
-# from rank_calculation import get_final_results_rrf
-# from sparse_rank import tf_idf
-# from openai import OpenAI
-# import os
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 chroma_client = chromadb.Client()
-collection = chroma_client.get_or_create_collection(name="LSTMNotes")
+collection = chroma_client.get_or_create_collection(name="LSTMNotes")#chromadb collection 
 
 pdf_path = "LSTM.pdf"
 url = "https://colah.github.io/posts/2015-08-Understanding-LSTMs/"
-chunk_list = parse_all(pdf_path, url)
-all_chunks_context(chunk_list,8)
-# asyncio.run(all_chunks_context_async(chunk_list))
-# chunks = somewhere.load_my_chunks()
-# asyncio.run(all_chunks_context_async(chunks))
+chunk_list = parse_all(pdf_path, url)#getting list of chunks
+all_chunks_context(chunk_list,8)#contextaul retrival
 
 def store_all_chunks():
     for i, chunk in enumerate(chunk_list, 1):
-        embedding = get_embeddings(chunk["text"])
-        vector_store(collection, embedding, chunk, i)
+        embedding = get_embeddings(chunk["text"])#creating embeddings for all chunks
+        vector_store(collection, embedding, chunk, i)#store in vector store
         logger.debug(f"embdding store for chunk{i}")
 if collection.count() == 0:
     logger.info("Collection is empty. Storing all chunks...")
-    store_all_chunks()
+    store_all_chunks()#call only when empty
 else:
     logger.info("Collection already contains data. Skipping storage.")
 def run_rag(query: str, top_k: int = 5) -> str:
     embedding_query = get_embeddings(query)
-    results_dense = collection.query(query_embeddings=[embedding_query], n_results=top_k)
-    print(results_dense)
-    topk_sparse_indices = tf_idf(chunk_list, query, top_k)
-    topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
+    results_dense = collection.query(query_embeddings=[embedding_query], n_results=top_k)#dense rank
+    #print(results_dense)
+    topk_sparse_indices = tf_idf(chunk_list, query, top_k)#sparse rank
+    topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)#final rank using rank fusion
     passages = []
     for idx, ch in enumerate(topk_chunks, start=1):
         passages.append(
