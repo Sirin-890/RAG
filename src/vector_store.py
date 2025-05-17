@@ -23,9 +23,9 @@ def vector_store(collection, embed_vector, chunk, chunk_no):
         ids=[f"id{chunk_no}"]
     )
 def process_and_store(chunk, idx,collection):
-    # 1️⃣ embed
+    # embedding creation
     embedding = get_embeddings(chunk["text"])
-    # 2️⃣ store
+    # 2️⃣ storein chromdb
     vector_store(collection, embedding, chunk, idx)
     logger.debug(f"✅ stored embedding for chunk {idx}")
     return idx
