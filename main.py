@@ -67,30 +67,27 @@ import os
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Setup ChromaDB & collection
 chroma_client = chromadb.Client()
 collection = chroma_client.get_or_create_collection(name="LSTMNotes")
 
-# Parse and store chunks only once
 pdf_path = "LSTM.pdf"
 url = "https://colah.github.io/posts/2015-08-Understanding-LSTMs/"
 chunk_list = parse_all(pdf_path, url)
 all_chunks_context(chunk_list)
 
-# You should run this separately once and skip re-embedding later
 def store_all_chunks():
     for i, chunk in enumerate(chunk_list, 1):
         embedding = get_embeddings(chunk["text"])
         vector_store(collection, embedding, chunk, i)
 
-def run_rag(query: str, top_k: int = 5) -> str:
+def run_rag(query: str, top_k: int = 10) -> str:
     embedding_query = get_embeddings(query)
     results_dense = collection.query(query_embeddings=[embedding_query], n_results=top_k)
     topk_sparse_indices = tf_idf(chunk_list, query, top_k)
     topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
 
 
-    user_prompt= "Context"+topk_chunks+"Query"+query
+    user_prompt= "the given Context"+ topk_chunks +"\n"+" The is Query"+query
     response = client.chat.completions.create(
         model="gpt-4",  # or "gpt-3.5-turbo"
         messages=[
