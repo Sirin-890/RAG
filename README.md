@@ -3,11 +3,11 @@ The RAG System is made using
 1. ChromaDB vector store
 2. OpenAI API,Embedding
 
-#WorkFlow
-1. Parsing (using Pymupdf and BeautifulSoup)
+# Workflow
+1. Parsing (using PyMupdf and BeautifulSoup)
 2. Contextual retrieval
-3. Dense Embedding using OpenAI 
-4. Sparse Embedding (TF-IDF)
+3. Dense Embeddings using OpenAI 
+4. Sparse Embeddings (TF-IDF)
 5. Rank Fusion
 6. Generation using OpenAI LLM
 
