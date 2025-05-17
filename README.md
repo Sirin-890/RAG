@@ -1,4 +1,4 @@
-# Getting Started
+# RAG
 
 Clone the repository and switch into its directory:
 
