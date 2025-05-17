@@ -6,10 +6,27 @@ prompt_template = (
 system_prompt = (
     "You are a knowledgeable assistant. "
     "Answer the user's question using the provided context. "
-    "If the answer is not in the context, say 'I don't know' instead of making something up."
+    "If context is totally irrelavant to the query then say query related context not in Document "
 )
 prompt2="a"
-QUE_ANS_AGENT_TASK = {
-    "description": "Answer the question `{}` based solely on the provided context `{}`. If the answer cannot be determined from the context, respond with a polite and direct message indicating that the information is unavailable. Do not ask for additional input or clarify the question.",
-    "expected_output": "The response should directly address the user's question using the context. If the answer cannot be found, state this clearly and avoid asking the user for further inputs."
-}
+# prompt = f"""
+# You are a precise technical assistant.  
+# When responding, you MUST use the exact text from any retrieved passage that answers the question.  
+# If the retrieved passage contains the answer, quote or paraphrase it directly; otherwise say “No explicit answer found.”
+
+# QUESTION:
+# {question}
+
+# RETRIEVED PASSAGES (ranked):
+# 1. \"\"\"{top_chunks[0]['text']}\"\"\"  
+# 2. \"\"\"{top_chunks[1]['text']}\"\"\"  
+# 3. \"\"\"{top_chunks[2]['text']}\"\"\"
+
+# INSTRUCTIONS:
+# - Look at each passage in order.
+# - If a passage answers the question, **summarize or quote** that section verbatim.
+# - Do not hallucinate or defer to “document does not provide”; only say that if none of the passages contain an answer.
+# - At the end, list which chunk(s) you used.
+
+# ANSWER:
+# """

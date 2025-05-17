@@ -79,22 +79,56 @@ def store_all_chunks():
     for i, chunk in enumerate(chunk_list, 1):
         embedding = get_embeddings(chunk["text"])
         vector_store(collection, embedding, chunk, i)
-
-def run_rag(query: str, top_k: int = 10) -> str:
+        logger.debug(f"embdding store for chunk{i}")
+if collection.count() == 0:
+    logger.info("Collection is empty. Storing all chunks...")
+    store_all_chunks()
+else:
+    logger.info("Collection already contains data. Skipping storage.")
+def run_rag(query: str, top_k: int = 5) -> str:
     embedding_query = get_embeddings(query)
     results_dense = collection.query(query_embeddings=[embedding_query], n_results=top_k)
+    print(results_dense)
     topk_sparse_indices = tf_idf(chunk_list, query, top_k)
     topk_chunks,l = get_final_results_rrf(results_dense, chunk_list, topk_sparse_indices, k=5)
+    passages = []
+    for idx, ch in enumerate(topk_chunks, start=1):
+        passages.append(
+            f"Passage {idx} :\n"
+            "```text\n"
+            f"{ch['text']}\n"
+            "```"
+        )
+    joined_passages = "\n\n".join(passages)
 
 
-    user_prompt= "the given Context"+ topk_chunks +"\n"+" The is Query"+query
+    #user_prompt= "the given Context"+ topk_chunks +"\n"+" The is Query"+query
+    user_prompt = f"""
+    You are a precise technical assistant.
+    When answering: 
+    • If any passage contains the answer, **quote or paraphrase it directly**.
+    • Otherwise, say “No explicit answer found in the passages.”
+
+    QUESTION:
+    {query}
+
+    RETRIEVED PASSAGES:
+    {joined_passages}
+
+    INSTRUCTIONS:
+    – Look at each Passage in order.
+    – Summarize or quote the relevant lines.
+    – Do not hallucinate or invent new content.
+
+    ANSWER:
+    """
     response = client.chat.completions.create(
         model="gpt-4",  # or "gpt-3.5-turbo"
         messages=[
-            {"role": "system", "content": system_prompt},
+            #{"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ],
-        temperature=0  # optional, lower = more accurate
+        temperature=0.3 # optional, lower = more accurate
     )
     logger.debug(response.choices[0].message.content)
     print(l)
