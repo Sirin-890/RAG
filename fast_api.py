@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
-from main import run_rag  # your RAG pipeline
+from src.main import run_rag  # your RAG pipeline
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 

@@ -1,16 +1,16 @@
-from parsing import parse_all
-from contextaul_retrival import all_chunks_context
-from embeddings import get_embeddings
-from vector_store import vector_store
+from src.parsing import parse_all
+from src.contextaul_retrival import all_chunks_context
+from src.embeddings import get_embeddings
+from src.vector_store import vector_store
 import chromadb
-from rank_calculation import get_final_results_rrf
-from sparse_rank import tf_idf
+from src.rank_calculation import get_final_results_rrf
+from src.sparse_rank import tf_idf
 import openai
 from openai import OpenAI
 from loguru import logger
-from prompts import*
+from src.prompts import*
 chroma_client = chromadb.Client()
-import os
+import os, asyncio
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 # client = OpenAI()
@@ -73,7 +73,10 @@ collection = chroma_client.get_or_create_collection(name="LSTMNotes")
 pdf_path = "LSTM.pdf"
 url = "https://colah.github.io/posts/2015-08-Understanding-LSTMs/"
 chunk_list = parse_all(pdf_path, url)
-all_chunks_context(chunk_list)
+all_chunks_context(chunk_list,8)
+# asyncio.run(all_chunks_context_async(chunk_list))
+# chunks = somewhere.load_my_chunks()
+# asyncio.run(all_chunks_context_async(chunks))
 
 def store_all_chunks():
     for i, chunk in enumerate(chunk_list, 1):
